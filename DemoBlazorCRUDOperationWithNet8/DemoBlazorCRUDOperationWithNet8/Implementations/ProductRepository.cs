@@ -1,6 +1,7 @@
 ﻿using DemoBlazorCRUDOperationWithNet8.Data;
 using DemoBlazorCRUDOperationWithNet8.Shared.Models;
 using DemoBlazorCRUDOperationWithNet8.Shared.ProductRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace DemoBlazorCRUDOperationWithNet8.Implementations
 {
@@ -13,9 +14,25 @@ namespace DemoBlazorCRUDOperationWithNet8.Implementations
             this._context = context;
         }
 
-        public Task<Product> AddProductAsync(Product product)
+        public async Task<Product> AddProductAsync(Product product)
         {
-            throw new NotImplementedException();
+            if (product is null)
+            {
+                return null;
+            }
+
+            var existProduct = await _context.Products
+                                             .Where(p => p.Name.ToLower().Equals(product.Name.ToLower())).FirstOrDefaultAsync();
+
+            if (existProduct is not null)
+            {
+                return null;
+            }
+
+           var newDataAdded  = _context.Products.Add(product).Entity;
+            await _context.SaveChangesAsync();
+
+            return newDataAdded; 
         }
 
         public Task DeleteProductAsync(int productId)
