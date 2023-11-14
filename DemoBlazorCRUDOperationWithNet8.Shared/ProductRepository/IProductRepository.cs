@@ -13,7 +13,7 @@ namespace DemoBlazorCRUDOperationWithNet8.Shared.ProductRepository
 
        Task<Product> UpdateProductAsync(Product product);
         
-       Task DeleteProductAsync(int productId); 
+       Task<Product> DeleteProductAsync(int productId); 
        
        Task<Product> GetAllProductAsync();
         

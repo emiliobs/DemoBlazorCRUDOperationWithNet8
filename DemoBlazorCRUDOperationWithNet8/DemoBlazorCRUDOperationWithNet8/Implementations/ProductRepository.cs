@@ -35,9 +35,19 @@ namespace DemoBlazorCRUDOperationWithNet8.Implementations
             return newDataAdded; 
         }
 
-        public Task DeleteProductAsync(int productId)
+        public async Task<Product> DeleteProductAsync(int productId)
         {
-            throw new NotImplementedException();
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == productId);
+
+            if (product is null)
+            {
+                return null;
+            }
+
+            _context.Remove(product);
+            await _context.SaveChangesAsync();
+
+            return product;
         }
 
         public Task<Product> GetAllProductAsync()
