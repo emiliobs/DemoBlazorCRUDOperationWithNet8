@@ -1,6 +1,9 @@
 using DemoBlazorCRUDOperationWithNet8.Client.Pages;
 using DemoBlazorCRUDOperationWithNet8.Components;
 using DemoBlazorCRUDOperationWithNet8.Data;
+using DemoBlazorCRUDOperationWithNet8.Implementations;
+using DemoBlazorCRUDOperationWithNet8.Shared;
+using DemoBlazorCRUDOperationWithNet8.Shared.ProductRepository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,11 +13,15 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
+builder.Services.AddControllersWithViews();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Sorry! Connection is not found."));
 });
 
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
 
@@ -31,7 +38,7 @@ else
 }
 
 app.UseHttpsRedirection();
-
+app.MapControllers();
 app.UseStaticFiles();
 app.UseAntiforgery();
 

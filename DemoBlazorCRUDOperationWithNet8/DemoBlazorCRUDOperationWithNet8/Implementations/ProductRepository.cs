@@ -50,19 +50,37 @@ namespace DemoBlazorCRUDOperationWithNet8.Implementations
             return product;
         }
 
-        public Task<Product> GetAllProductAsync()
+        public async Task<List<Product>> GetAllProductAsync() => await _context.Products.ToListAsync();
+
+        public async Task<Product> GetProductByIdAsync(int productId)
         {
-            throw new NotImplementedException();
+            var findProduct = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == productId);
+            
+            if(findProduct is null)
+            {
+                return null; 
+            }
+
+            return findProduct;
+
+
         }
 
-        public Task<Product> GetProductByIdAsync(int productId)
+        public async Task<Product> UpdateProductAsync(Product product)
         {
-            throw new NotImplementedException();
+            var findProduct = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == product.ProductId);
+
+            if (findProduct is null)
+            {
+                return null;
+            }
+
+            product.Name = product.Name;
+            product.Quantity = product.Quantity;
+
+            return product;
         }
 
-        public Task<Product> UpdateProductAsync(Product product)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
